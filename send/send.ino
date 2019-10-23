@@ -3,11 +3,16 @@
 RCSwitch mySwitch = RCSwitch();
 int toggleButton = 5;
 int sleepButton = 6;
+
 int toggleState = HIGH;
 int sleepState = HIGH;
+
 int readingToggle;
 int readingSleep;
+
 int previousToggle = LOW;
+
+long sleepTimer;
 
 long time = 0;
 long debounce = 200;
@@ -24,12 +29,15 @@ void loop() {
   readingToggle = digitalRead(toggleButton);
   readingSleep = digitalRead(sleepButton);
 
-  if (readingToggle == HIGH && previousToggle == LOW && millis() - time > debounce) {
+  if (readingToggle == HIGH && millis() - time > debounce) {
     if (toggleState == HIGH) {
+      Serial.print("Turning off lights \n");
       toggleState = LOW;
       mySwitch.send(83028, 24); 
       mySwitch.send(70740, 24);
+
     } else {
+      Serial.print("Turning on lights \n");
       toggleState = HIGH;
       mySwitch.send(83029, 24); 
       mySwitch.send(70741, 24);
@@ -38,13 +46,13 @@ void loop() {
     previousToggle = readingToggle;
   }
 
-  Serial.print(readingSleep);
-  Serial.print("\n");
-
-  if (readingSleep == LOW && millis() - time > debounce) {
-    mySwitch.send(83028, 24);
-    delay(2000);
+  if (readingSleep == HIGH && millis() - time > debounce && toggleState == HIGH) {
+    Serial.print("Turning off lights - Sleep \n");
     mySwitch.send(70740, 24);
+    sleepTimer = random(900000,1800000);
+    delay(sleepTimer);
+    mySwitch.send(83028, 24);
+    toggleState = LOW;
     time = millis();
   }
 }
