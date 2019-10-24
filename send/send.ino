@@ -54,8 +54,8 @@ void loop() {
   if (readingSleep == HIGH && millis() - time > debounce && toggleState == HIGH) {
     Serial.print("Turning off lights - Sleep \n");
     mySwitch.send(70740, 24);
-    sleepTimer = random(900000,1800000);
-    delay(sleepTimer);
+    //sleepTimer = random(900000,1800000);
+    delay(2000);
     mySwitch.send(83028, 24);
     toggleState = LOW;
     time = millis();
