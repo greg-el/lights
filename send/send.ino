@@ -3,12 +3,14 @@
 RCSwitch mySwitch = RCSwitch();
 int toggleButton = 5;
 int sleepButton = 6;
+int pot = A1;
 
 int toggleState = HIGH;
 int sleepState = HIGH;
 
 int readingToggle;
 int readingSleep;
+int readingPot;
 
 int previousToggle = LOW;
 
@@ -28,6 +30,9 @@ void setup() {
 void loop() {
   readingToggle = digitalRead(toggleButton);
   readingSleep = digitalRead(sleepButton);
+  readingPot = analogRead(pot);
+  Serial.print(readingPot);
+  Serial.print("\n");
 
   if (readingToggle == HIGH && millis() - time > debounce) {
     if (toggleState == HIGH) {
