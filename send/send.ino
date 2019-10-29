@@ -22,17 +22,19 @@ long debounce = 200;
 
 void setup() {
   Serial.begin(9600);
-  mySwitch.enableTransmit(2);
+  mySwitch.enableTransmit(3);
   pinMode(toggleButton, INPUT);
   pinMode(sleepButton, INPUT);
 }
 
 void loop() {
   readingToggle = digitalRead(toggleButton);
+
   readingSleep = digitalRead(sleepButton);
+
   readingPot = analogRead(pot);
-  //Serial.print(readingPot);
-  //Serial.print("\n");
+  Serial.print(readingPot);
+  Serial.print("\n");
 
   if (readingToggle == HIGH && millis() - time > debounce) {
     if (toggleState == HIGH) {
@@ -51,7 +53,7 @@ void loop() {
     previousToggle = readingToggle;
   }
 
-  if (readingSleep == HIGH && millis() - time > debounce && toggleState == HIGH) {
+  if (readingSleep == HIGH && millis() - time > debounce) {
     Serial.print("Turning off lights - Sleep \n");
     mySwitch.send(70740, 24);
     sleepTimer = readingPot*1757L;
